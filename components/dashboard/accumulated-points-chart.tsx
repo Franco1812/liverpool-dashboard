@@ -10,18 +10,29 @@ import {
   ResponsiveContainer,
 } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
-const data = [
-  { date: "Ago", points: 6, matches: 2 },
-  { date: "Sep", points: 15, matches: 5 },
-  { date: "Oct", points: 27, matches: 9 },
-  { date: "Nov", points: 39, matches: 13 },
-  { date: "Dic", points: 51, matches: 17 },
-  { date: "Ene", points: 63, matches: 21 },
-  { date: "Feb", points: 72, matches: 25 },
-]
+import { useLiverpool } from "@/contexts/liverpool-context"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function AccumulatedPointsChart() {
+  const { data } = useLiverpool()
+  const chartData = data?.accumulatedPoints ?? []
+  const currentPoints = data?.points ?? 0
+
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Puntos Acumulados
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <Skeleton className="h-[200px] w-full rounded-lg" />
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-2">
@@ -30,7 +41,7 @@ export function AccumulatedPointsChart() {
             Puntos Acumulados
           </CardTitle>
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-foreground">72</span>
+            <span className="text-2xl font-bold text-foreground">{currentPoints}</span>
             <span className="text-xs text-muted-foreground">pts</span>
           </div>
         </div>
@@ -38,7 +49,7 @@ export function AccumulatedPointsChart() {
       <CardContent className="pt-0">
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="pointsGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#c8102e" stopOpacity={0.3} />

@@ -4,6 +4,8 @@ import React from "react"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { TrendingUp, TrendingDown, Target, Trophy, Percent, Calendar } from "lucide-react"
+import { useLiverpool } from "@/contexts/liverpool-context"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface StatCardProps {
   title: string
@@ -32,9 +34,8 @@ function StatCard({ title, value, subtitle, icon, trend, highlight }: StatCardPr
               </span>
               {trend && (
                 <span
-                  className={`flex items-center gap-0.5 text-xs font-medium ${
-                    trend.positive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
-                  }`}
+                  className={`flex items-center gap-0.5 text-xs font-medium ${trend.positive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
+                    }`}
                 >
                   {trend.positive ? (
                     <TrendingUp className="h-3 w-3" />
@@ -58,34 +59,51 @@ function StatCard({ title, value, subtitle, icon, trend, highlight }: StatCardPr
   )
 }
 
+function positionSuffix(n: number) {
+  if (n === 1) return "ro"
+  if (n === 2) return "do"
+  if (n === 3) return "ro"
+  return "to"
+}
+
 export function StatsCards() {
+  const { data } = useLiverpool()
+
+  if (!data) {
+    return (
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} className="h-28 rounded-lg" />
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard
         title="Goles Totales"
-        value={59}
+        value={data.goalsFor}
         subtitle="Esta temporada"
         icon={<Target className="h-5 w-5" />}
-        trend={{ value: 12, positive: true }}
       />
       <StatCard
         title="Posicion Liga"
-        value="1ro"
-        subtitle="Premier League"
+        value={`${data.position}${positionSuffix(data.position)}`}
+        subtitle={data.leagueName}
         icon={<Trophy className="h-5 w-5" />}
         highlight
       />
       <StatCard
         title="Efectividad"
-        value="72%"
+        value={`${data.winRatePercent}%`}
         subtitle="Victorias totales"
         icon={<Percent className="h-5 w-5" />}
-        trend={{ value: 8, positive: true }}
       />
       <StatCard
         title="Partidos"
-        value={40}
-        subtitle="Todas las competiciones"
+        value={data.played}
+        subtitle={data.leagueName}
         icon={<Calendar className="h-5 w-5" />}
       />
     </div>

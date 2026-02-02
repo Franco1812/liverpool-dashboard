@@ -10,24 +10,30 @@ import {
   Cell,
 } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
-const goalDiffData = [
-  { comp: "Premier", diff: 24, fullName: "Premier League" },
-  { comp: "UCL", diff: 8, fullName: "Champions League" },
-  { comp: "FA Cup", diff: 3, fullName: "FA Cup" },
-  { comp: "EFL", diff: -4, fullName: "EFL Cup" },
-]
-
-const matchesData = [
-  { comp: "Premier League", matches: 25, wins: 18, draws: 5, losses: 2 },
-  { comp: "Champions League", matches: 8, wins: 6, draws: 1, losses: 1 },
-  { comp: "FA Cup", matches: 4, wins: 3, draws: 1, losses: 0 },
-  { comp: "EFL Cup", matches: 3, wins: 2, draws: 0, losses: 1 },
-]
+import { useLiverpool } from "@/contexts/liverpool-context"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const COLORS = ["#c8102e", "#d4a017", "#64748b"]
 
 export function GoalDiffByCompetitionChart() {
+  const { data } = useLiverpool()
+  const goalDiffData = data?.goalDiffByCompetition ?? []
+
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Dif. Goles por Competicion
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <Skeleton className="h-[180px] w-full rounded-lg" />
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-2">
@@ -65,8 +71,8 @@ export function GoalDiffByCompetitionChart() {
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                 }}
                 labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
-                formatter={(value, name, props) => [
-                  `${value > 0 ? "+" : ""}${value}`,
+                formatter={(value, _name, props) => [
+                  `${Number(value) > 0 ? "+" : ""}${value}`,
                   props.payload.fullName
                 ]}
               />
@@ -87,6 +93,24 @@ export function GoalDiffByCompetitionChart() {
 }
 
 export function MatchesByCompetitionChart() {
+  const { data } = useLiverpool()
+  const matchesData = data?.matchesByCompetition ?? []
+
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Partidos por Competicion
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <Skeleton className="h-[180px] w-full rounded-lg" />
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-2">

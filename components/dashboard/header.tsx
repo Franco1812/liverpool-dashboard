@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useLiverpool } from "@/contexts/liverpool-context"
 
 const competitions = [
   "Todas las Competiciones",
@@ -65,6 +66,8 @@ export function DashboardHeader() {
   const [selectedCompetition, setSelectedCompetition] = useState(
     "Todas las Competiciones"
   )
+  const { data } = useLiverpool()
+  const seasonLabel = data?.season ? `Temporada ${data.season}` : "Temporada 2024-25"
 
   return (
     <header className="flex flex-col gap-6">
@@ -76,10 +79,10 @@ export function DashboardHeader() {
               LIVERPOOL FC
             </h1>
             <p className="text-base lg:text-xl font-semibold text-primary mt-1">
-              PERFORMANCE ANALYSIS 2025-26
+              PERFORMANCE ANALYSIS {data?.season ?? "2024-25"}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Datos de ejemplo - No son estadisticas reales
+              {data ? "Estadísticas en vivo · API-Football" : "Cargando…"}
             </p>
           </div>
         </div>
@@ -89,7 +92,7 @@ export function DashboardHeader() {
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 px-4 py-2.5 bg-card rounded-lg border shadow-sm">
           <Calendar className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium text-foreground">Temporada 2025-26</span>
+          <span className="text-sm font-medium text-foreground">{seasonLabel}</span>
         </div>
 
         <DropdownMenu>

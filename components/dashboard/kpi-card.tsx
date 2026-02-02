@@ -2,16 +2,31 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Flame, TrendingUp } from "lucide-react"
-
-const recentResults = [
-  { result: "W", score: "3-1" },
-  { result: "W", score: "2-0" },
-  { result: "D", score: "1-1" },
-  { result: "W", score: "4-2" },
-  { result: "W", score: "2-1" },
-]
+import { useLiverpool } from "@/contexts/liverpool-context"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function KPICard() {
+  const { data } = useLiverpool()
+  const lastFive = data?.lastFive ?? []
+  const unbeatenStreak = data?.unbeatenStreak ?? 0
+  const winsLast5 = lastFive.filter((r) => r.result === "W").length
+  const drawsLast5 = lastFive.filter((r) => r.result === "D").length
+
+  if (!data) {
+    return (
+      <Card className="h-full flex flex-col">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Racha Invicta
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center flex-1 py-4">
+          <Skeleton className="h-24 w-24 rounded-full" />
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
@@ -24,7 +39,7 @@ export function KPICard() {
           <div className="absolute -inset-4 bg-primary/10 rounded-full blur-xl" />
           <div className="relative flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary/80">
             <div className="text-center">
-              <span className="text-4xl font-bold text-white">12</span>
+              <span className="text-4xl font-bold text-white">{unbeatenStreak}</span>
               <Flame className="absolute -top-2 -right-2 h-6 w-6 text-amber-500" />
             </div>
           </div>
@@ -39,20 +54,19 @@ export function KPICard() {
             </span>
             <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
               <TrendingUp className="h-3 w-3" />
-              <span>4V 1E</span>
+              <span>{winsLast5}V {drawsLast5}E</span>
             </div>
           </div>
           <div className="flex justify-between gap-2">
-            {recentResults.map((game, i) => (
+            {(lastFive.length ? lastFive : [{ result: "W" as const, score: "-" }]).map((game, i) => (
               <div
                 key={i}
-                className={`flex-1 py-2 px-1 rounded-lg text-center text-xs font-medium transition-colors ${
-                  game.result === "W"
+                className={`flex-1 py-2 px-1 rounded-lg text-center text-xs font-medium transition-colors ${game.result === "W"
                     ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
                     : game.result === "D"
-                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                    : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                }`}
+                      ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                      : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                  }`}
               >
                 <div className="font-bold">{game.result}</div>
                 <div className="text-[10px] opacity-80">{game.score}</div>
