@@ -1,38 +1,38 @@
-# Liverpool FC ? Dashboard de estad�sticas
+# Liverpool FC - Dashboard de estadisticas
 
-Dashboard web que muestra **estad�sticas en vivo del Liverpool FC** en la Premier League (temporada 2024-25). Los datos se obtienen de la API [API-Football](https://www.api-football.com/) (v3).
+Dashboard web que muestra **estadisticas en vivo del Liverpool FC** en la Premier League (temporada 2024-25). Los datos se obtienen de la API [API-Football](https://www.api-football.com/) (v3).
 
-## Qu� hace la p�gina
+## Que hace la pagina
 
-- **Cabecera:** logo del club, t�tulo, temporada actual y selector de competici�n (por ahora solo Premier League).
+- **Cabecera:** logo del club, titulo, temporada actual y selector de competicion (por ahora solo Premier League).
 - **Tarjetas de resumen (KPIs):**
   - Goles totales
-  - Posici�n en la liga
+  - Posicion en la liga
   - Efectividad (% victorias)
   - Partidos jugados
-- **Gr�fico de resultados:** donut con victorias, empates y derrotas.
-- **Puntos acumulados:** gr�fico de �rea con la evoluci�n de puntos en la liga por mes.
-- **Racha invicta:** partidos sin perder y �ltimos 5 partidos con resultado (V/E/D y marcador).
+- **Grafico de resultados:** donut con victorias, empates y derrotas.
+- **Puntos acumulados:** grafico de area con la evolucion de puntos en la liga por mes.
+- **Racha invicta:** partidos sin perder y ultimos 5 partidos con resultado (V/E/D y marcador).
 - **Diferencia de goles:** barras por mes (goles a favor menos en contra).
-- **Por competici�n:** diferencia de goles y partidos (V/E/D) por competici�n (actualmente Premier League).
+- **Por competicion:** diferencia de goles y partidos (V/E/D) por competicion (actualmente Premier League).
 
-Todo se actualiza al cargar la p�gina desde la API; si no hay API key o falla la petici�n, se muestra un mensaje de error con enlace para registrarse.
+Todo se actualiza al cargar la pagina desde la API; si no hay API key o falla la peticion, se muestra un mensaje de error con enlace para registrarse.
 
-## Tecnolog�as
+## Tecnologias
 
 - **Next.js 16** (App Router)
 - **React 19**, **TypeScript**
 - **Tailwind CSS**, **Radix UI**, **Recharts**
-- **API-Football v3** (datos de f�tbol)
+- **API-Football v3** (datos de futbol)
 
-## C�mo ejecutarla
+## Como ejecutarla
 
 1. Clonar el repo e instalar dependencias:
    ```bash
    npm install
    ```
 
-2. Crear `.env.local` en la ra�z con tu clave de API-Football:
+2. Crear `.env.local` en la raiz con tu clave de API-Football:
    ```
    API_FOOTBALL_KEY=tu_clave_aqui
    ```
@@ -47,20 +47,20 @@ Todo se actualiza al cargar la p�gina desde la API; si no hay API key o falla 
 
 ## Scripts
 
-| Comando     | Descripci�n              |
+| Comando     | Descripcion              |
 |------------|---------------------------|
 | `npm run dev`   | Servidor de desarrollo    |
-| `npm run build` | Build de producci�n       |
-| `npm run start` | Servidor de producci�n    |
+| `npm run build` | Build de produccion       |
+| `npm run start` | Servidor de produccion    |
 | `npm run lint`  | Ejecutar ESLint           |
 
 ## Estructura relevante
 
-- `app/page.tsx` ? P�gina principal del dashboard (estados de carga/error y layout).
-- `app/api/liverpool/route.ts` ? Ruta API que llama a API-Football y devuelve los datos del dashboard.
-- `lib/api-football.ts` ? Cliente para standings, estad�sticas de equipo y fixtures (sin usar el par�metro `last` del plan gratuito).
-- `contexts/liverpool-context.tsx` ? Contexto que hace fetch a `/api/liverpool` y expone `data`, `loading`, `error`.
-- `components/dashboard/` ? Componentes de las tarjetas y gr�ficos (usan el contexto).
+- `app/page.tsx` - Pagina principal del dashboard (estados de carga/error y layout).
+- `app/api/liverpool/route.ts` - Ruta API que llama a API-Football y devuelve los datos del dashboard.
+- `lib/api-football.ts` - Cliente para standings, estadisticas de equipo y fixtures (sin usar el parametro `last` del plan gratuito).
+- `contexts/liverpool-context.tsx` - Contexto que hace fetch a `/api/liverpool` y expone `data`, `loading`, `error`.
+- `components/dashboard/` - Componentes de las tarjetas y graficos (usan el contexto).
 
 ## Referencia API-Football
 
